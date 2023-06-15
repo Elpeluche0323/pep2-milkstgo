@@ -53,10 +53,6 @@ public class AcopioService {
         return acopioRepository.buscarData(codigo, fecha);
     }
 
-    public AcopioEntity obtenerAcopio2(String codigo, String fecha){
-        return acopioRepository.buscarData2(codigo, fecha);
-    }
-
     public void leerCsv(String direccion) {
         String texto = "";
         BufferedReader bf = null;

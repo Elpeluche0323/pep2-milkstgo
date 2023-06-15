@@ -1,15 +1,15 @@
-package milkstgo.valores_gsservice;
+package milkstgo.gatewayservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@EnableEurekaClient
 @SpringBootApplication
-public class ValoresGsServiceApplication {
+@EnableEurekaClient
+public class GatewayServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ValoresGsServiceApplication.class, args);
+		SpringApplication.run(GatewayServiceApplication.class, args);
 	}
 
 }

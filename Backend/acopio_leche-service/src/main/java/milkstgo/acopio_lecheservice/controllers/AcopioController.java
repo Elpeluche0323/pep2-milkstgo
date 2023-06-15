@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 @RestController
-@RequestMapping("/acopio")
+@RequestMapping("/acopio_leche")
 public class AcopioController {
 
     @Autowired
@@ -37,6 +37,29 @@ public class AcopioController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(proveedor);
+    }
+
+    @GetMapping("/acopio/{proveedor}/{fecha}")
+    public ResponseEntity<AcopioEntity> obtenerFechaPorProveedor(
+            @PathVariable("proveedor") String proveedor, @PathVariable("fecha") String fecha)
+    {
+        AcopioEntity fecha_envio = acopioService.obtenerAcopio(proveedor, fecha);
+        return ResponseEntity.ok(fecha_envio);
+    }
+
+    @GetMapping("/primeraasistencia/{proveedor}")
+    public ResponseEntity<String> obtenerPrimeraAsistencia(@PathVariable("proveedor") String proveedor){
+        String fecha = acopioService.obtenerFechaProveedor(proveedor);
+        if (fecha.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(fecha);
+    }
+
+    @PostMapping
+    public void guardarData(@RequestParam("file") MultipartFile file, RedirectAttributes ms) throws FileNotFoundException, ParseException{
+        acopioService.guardar(file);
+        acopioService.leerCsv("Acopio.csv");
     }
 
 }

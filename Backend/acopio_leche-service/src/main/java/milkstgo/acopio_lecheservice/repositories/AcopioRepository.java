@@ -22,9 +22,6 @@ public interface AcopioRepository  extends JpaRepository <AcopioEntity, Integer>
     @Query(value = "select e.fecha from datos_acopio as e where e.proveedor = :proveedor limit 1", nativeQuery = true)
     String buscarFechaProveedor(@Param("proveedor")String proveedor);
 
-    @Query(value = "select * from datos_acopio as e where e.proveedor = :proveedor and e.fecha = :fecha order by e.fecha desc limit 1",  nativeQuery = true)
-    AcopioEntity buscarData2(@Param("proveedor")String proveedor, @Param("fecha") String fecha);
-
     @Query(value = "select *  from datos_acopio as e where e.proveedor = :proveedor", nativeQuery = true)
     ArrayList<AcopioEntity> eliminarData(@Param("proveedor")String proveedor);
 
