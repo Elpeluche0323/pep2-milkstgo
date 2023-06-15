@@ -49,8 +49,8 @@ public class AcopioService {
         }
     }
 
-    public AcopioEntity obtenerAcopio(String codigo, String fecha){
-        return acopioRepository.buscarData(codigo, fecha);
+    public AcopioEntity obtenerAcopio(String proveedor, String fecha){
+        return acopioRepository.buscarData(proveedor, fecha);
     }
 
     public void leerCsv(String direccion) {

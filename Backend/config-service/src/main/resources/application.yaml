@@ -7,6 +7,6 @@ spring:
         git:
           default-label: main
           uri: https://github.com/Elpeluche0323/pep2-milkstgo
-          search-paths: /config-data
+          search-paths: config-data
   application:
     name: config-service

@@ -18,6 +18,6 @@ public class ValoresEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String proveedor;
-    private int grasa;
-    private int solido;
+    private float grasa;
+    private float solido;
 }
