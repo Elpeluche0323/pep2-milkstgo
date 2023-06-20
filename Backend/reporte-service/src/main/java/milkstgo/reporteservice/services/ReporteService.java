@@ -1,9 +1,12 @@
 package milkstgo.reporteservice.services;
 
+
 import milkstgo.reporteservice.entities.ReporteEntity;
 import milkstgo.reporteservice.repositories.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
 public class ReporteService {
     @Autowired
     private ReporteRepository reporteRepository;
+    @Autowired
+    private RestTemplate restTemplate;
 
     public void guardarReporte(String quincena, String codigo_proveedor){
         ReporteEntity reporte = new ReporteEntity();

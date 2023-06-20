@@ -105,4 +105,20 @@ public class AcopioService {
     public void eliminarData(ArrayList<AcopioEntity> datas){
         acopioRepository.deleteAll(datas);
     }
+
+
+    public static float sueldoLecheCategoria(String categoria, float kls_leche){
+        switch(categoria){
+            case "A":
+                return (700 * kls_leche);
+            case "B":
+                return (550 * kls_leche);
+            case "C":
+                return (400 * kls_leche);
+            case "D":
+                return (250 * kls_leche);
+            default:
+                return 0;
+        }
+    }
 }

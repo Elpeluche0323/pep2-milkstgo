@@ -1,7 +1,6 @@
 package milkstgo.proveedorservice.controllers;
 
 import milkstgo.proveedorservice.entities.ProveedorEntity;
-import milkstgo.proveedorservice.models.ReporteModel;
 import milkstgo.proveedorservice.services.ProveedorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +31,14 @@ public class ProveedorController {
         return ResponseEntity.ok(proveedor);
     }
 
+    @GetMapping("/{codigo}/categoria")
+    public ResponseEntity<String> obtenerCategoria(@PathVariable("codigo") String codigo){
+        ProveedorEntity proveedor = proveedorService.findByCodigo(codigo);
+        if(proveedor == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(proveedor.getCategoria());
+    }
+
     @PostMapping
     public void guardarProveedor(@RequestBody ProveedorEntity proveedor){
         proveedorService.guardarProveedor(proveedor);
@@ -40,12 +47,6 @@ public class ProveedorController {
     @GetMapping("/eliminar")
     public void eliminarProveedor() {proveedorService.eliminarProveedor();}
 
-    @GetMapping("/reporte/{codigo}")
-    public ResponseEntity<List<ReporteModel>> obtenenerPlanilla(@PathVariable("codigo") String codigo) {
-        ProveedorEntity proveedor = proveedorService.findByCodigo(codigo);
-        if(proveedor == null)
-            return ResponseEntity.notFound().build();
-        List<ReporteModel> reporte = proveedorService.obtenerReporte(codigo);
-        return ResponseEntity.ok(reporte);
-    }
+
+
 }

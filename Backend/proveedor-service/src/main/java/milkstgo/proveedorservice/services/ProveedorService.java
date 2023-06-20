@@ -2,11 +2,9 @@ package milkstgo.proveedorservice.services;
 
 
 import milkstgo.proveedorservice.entities.ProveedorEntity;
-import milkstgo.proveedorservice.models.ReporteModel;
 import milkstgo.proveedorservice.repositories.ProveedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +12,6 @@ import java.util.List;
 public class ProveedorService {
     @Autowired
     ProveedorRepository proveedorRepository;
-
-    @Autowired
-    RestTemplate restTemplate;
 
     public ArrayList<ProveedorEntity> obtenerProveedor(){
         return (ArrayList<ProveedorEntity>) proveedorRepository.findAll();
@@ -34,10 +29,10 @@ public class ProveedorService {
         proveedorRepository.deleteAll();
     }
 
-    public List<ReporteModel> obtenerReporte(String codigo) {
-        List<ReporteModel> reporte = restTemplate.getForObject("http://reporte-service/reporte/porproveedor/" + codigo, List.class);
-        return reporte;
+    public ProveedorEntity buscarCategoria(ProveedorEntity categoria){
+        return categoria;
     }
+
 
 
 }

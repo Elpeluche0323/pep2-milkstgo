@@ -66,4 +66,6 @@ public class ReporteController {
     public void eliminarReporte(){
         reporteService.eliminarReporte();
     }
+
+
 }
