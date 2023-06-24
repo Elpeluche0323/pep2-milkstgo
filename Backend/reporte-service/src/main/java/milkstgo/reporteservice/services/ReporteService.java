@@ -2,8 +2,12 @@ package milkstgo.reporteservice.services;
 
 
 import milkstgo.reporteservice.entities.ReporteEntity;
+import milkstgo.reporteservice.models.ProveedorModel;
+import milkstgo.reporteservice.models.AcopioModel;
+import milkstgo.reporteservice.models.ValoresModel;
 import milkstgo.reporteservice.repositories.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -64,4 +68,5 @@ public class ReporteService {
     public void eliminarReporte(){
         this.reporteRepository.deleteAll();
     }
+
 }

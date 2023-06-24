@@ -23,9 +23,19 @@ public class ProveedorController {
         return ResponseEntity.ok(proveedor);
     }
 
+
     @GetMapping("/{codigo}")
     public ResponseEntity<ProveedorEntity> obtenerPorCodigo(@PathVariable("codigo") String codigo){
         ProveedorEntity proveedor = proveedorService.findByCodigo(codigo);
+        if(proveedor == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(proveedor);
+    }
+
+
+    @GetMapping("/{nombre}")
+    public ResponseEntity<ProveedorEntity> obtenerPorNombre(@PathVariable("nombre") String nombre){
+        ProveedorEntity proveedor = proveedorService.findByNombre(nombre);
         if(proveedor == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok(proveedor);

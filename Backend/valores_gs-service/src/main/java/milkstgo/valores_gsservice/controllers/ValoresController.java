@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/valores_gs")
 public class ValoresController {
     @Autowired
     private ValoresService valoresService;

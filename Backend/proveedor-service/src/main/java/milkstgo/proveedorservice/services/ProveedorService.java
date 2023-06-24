@@ -21,6 +21,10 @@ public class ProveedorService {
         return proveedorRepository.findByCodigo(codigo);
     }
 
+    public ProveedorEntity findByNombre(String nombre){
+        return proveedorRepository.findByNombre(nombre);
+    }
+
     public void guardarProveedor(ProveedorEntity proveedor){
         proveedorRepository.save(proveedor);
     }

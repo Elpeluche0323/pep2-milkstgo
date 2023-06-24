@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ProveedorRepository extends JpaRepository<ProveedorEntity, String> {
 
     @Query(value = "select  e from  proveedores e where e.nombre = :nombre",nativeQuery = true)
-    ProveedorEntity findByNameCustomQuery(@Param("nombre") String nombre);
+    ProveedorEntity findByNombre(@Param("nombre") String nombre);
 
     @Query( value = "select e from proveedores as e where e.codigo = :codigo",nativeQuery = true)
     ProveedorEntity findByCodigo(@Param("codigo")String codigo);
