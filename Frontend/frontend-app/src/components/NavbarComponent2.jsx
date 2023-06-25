@@ -12,7 +12,7 @@ function NavbarComponent2(){
                 <nav>
                 </nav>
                 <a class="btn" href="/"><button>Volver al menú principal</button></a>
-                <a class="btn-2" href="/subir-archivo-acopio"><button>Cargar un nuevo archivo Acopio .csv</button></a>
+                <a class="btn-2" href="/subir-archivo-acopio"><button>Cargar un nuevo archivo Acopio.csv</button></a>
             </header>
             </NavStyle>
         </>

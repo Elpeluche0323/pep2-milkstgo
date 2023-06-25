@@ -3,12 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavbarComponent from "./NavbarComponent5";
-import FileUploadValoresService from "../services/FileUploadValoresService";
+import NavbarComponent from "./NavbarComponent";
+import FileUploadAcopioService from "../services/FileUpdateAcopioService";
 import styled from "styled-components";
 import swal from 'sweetalert';
 
-class FileUploadValoresComponent extends Component{
+class FileUploadAcopioComponent extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +24,7 @@ class FileUploadValoresComponent extends Component{
   onFileUpload = () => {
     swal({
       title: "¿Está seguro de que desea cargar el archivo?",
-      text: "Tenga en cuenta que el archivo solo será cargado si su nombre es 'ValoresGS.csv' y si su formato es correcto.",
+      text: "Tenga en cuenta que el archivo solo será cargado si su nombre es 'Acopio.csv' y si su formato es correcto.",
       icon: "warning",
       buttons: ["Cancelar", "Cargar"],
       dangerMode: true
@@ -33,7 +33,7 @@ class FileUploadValoresComponent extends Component{
         swal("Archivo cargado correctamente!", {icon: "success", timer: "3000"});
         const formData = new FormData();
         formData.append("file", this.state.file);
-        FileUploadValoresService.CargarArchivo(formData).then((res) => {
+        FileUploadAcopioService.CargarArchivo(formData).then((res) => {
         });
       }
       else{
@@ -49,7 +49,7 @@ class FileUploadValoresComponent extends Component{
         <Styles>
           <div class="f">
             <div class="container">
-              <h1><b>Cargar el archivo de datos de Valores Grasa y Solidos </b></h1>
+              <h1><b>Cargar el archivo de datos de acopio leche</b></h1>
               <Row className="mt-4">
                 <Col col="12">
                   <Form.Group className="mb-3" controlId="formFileLg">
@@ -66,7 +66,7 @@ class FileUploadValoresComponent extends Component{
           <hr>
           </hr>
           <div class="form1">
-            <h5><b>Recuerde que el nombre del archivo debe ser "ValoresGS.csv"!</b></h5>
+            <h5><b>Recuerde que el nombre del archivo debe ser "Acopio.csv"!</b></h5>
           </div>
         </Styles>
       </div>
@@ -74,7 +74,7 @@ class FileUploadValoresComponent extends Component{
   }
 }
 
-export default FileUploadValoresComponent;
+export default FileUploadAcopioComponent;
 
 
 const Styles = styled.div`
