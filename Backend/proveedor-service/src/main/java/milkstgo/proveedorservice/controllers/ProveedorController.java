@@ -15,7 +15,7 @@ public class ProveedorController {
     @Autowired
     ProveedorService proveedorService;
 
-    @GetMapping
+    @GetMapping("/lista-proveedores")
     public ResponseEntity<List<ProveedorEntity>> obtenerProveedor(){
         List<ProveedorEntity> proveedor = proveedorService.obtenerProveedor();
         if(proveedor.isEmpty())
@@ -57,6 +57,10 @@ public class ProveedorController {
     @GetMapping("/eliminar")
     public void eliminarProveedor() {proveedorService.eliminarProveedor();}
 
+    @GetMapping("/nuevo-proveedor")
+    public String proveedor(){
+        return "/nuevo-proveedor";
+    }
 
 
 }

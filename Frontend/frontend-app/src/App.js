@@ -4,8 +4,10 @@ import HomeComponent from './components/HomeComponent';
 import FileUploadAcopioComponent from './components/FileUploadAcopioComponent';
 import FileUploadValoresComponent from './components/FileUploadValoresComponent';
 import ProveedorComponent from './components/ProveedorComponent';
-// import FileInformationAcopioComponent from './components/FileInformationAcopioComponent';
-// import FileInformationValoresComponent from './components/FileInformationValoresComponent';
+import CreateProveedorComponent from './components/CreateProveedorComponent';
+import ReporteComponent from './components/ReporteComponent';
+import FileInformationAcopioComponent from './components/FileInformationAcopioComponent';
+import FileInformationValoresComponent from './components/FileInformationValoresComponent';
 // import EmployeeComponent from './components/EmployeeComponent';
 // import JustificativoComponent from './components/JustificativoComponent';
 // import AutorizacionComponent from './components/AutorizacionComponent';
@@ -19,6 +21,10 @@ function App() {
         <Route path= "/subir-archivo-acopio" element={<FileUploadAcopioComponent/>} />
         <Route path= "/lista-proveedores" element={<ProveedorComponent />} />
         <Route path= "/subir-archivo-valores" element={<FileUploadValoresComponent />} />
+        <Route path= "/nuevo-proveedor" element={<CreateProveedorComponent />} />
+        <Route path= "/reporte" element={<ReporteComponent/>} />
+        <Route path= "/informacion-archivo-acopio" element={<FileInformationAcopioComponent />} />
+        <Route path= "/informacion-archivo-valores" element={<FileInformationValoresComponent />}/>
       </Routes>
     </BrowserRouter>
   </div>

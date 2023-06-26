@@ -1,6 +1,6 @@
 import React, { } from "react";
 import styled from "styled-components";
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components';
 
 
 export default function Home(){
@@ -21,6 +21,15 @@ export default function Home(){
                         </div>
                     </div>
                     <div class="single-box">
+                        <a href="/nuevo-proveedor">
+                            <div class="img-area">
+                            </div>
+                        </a>
+                        <div class="img-text">
+                            <span class="header-text"><strong>Agregar Proveedor</strong></span>
+                        </div>
+                    </div>
+                    <div class="single-box">
                         <a href="/lista-proveedores">
                             <div class="img-area">
                             </div>
@@ -36,6 +45,15 @@ export default function Home(){
                         </a>
                         <div class="img-text">
                             <span class="header-text"><strong>Cargar ValoresGS.csv</strong></span>
+                        </div>
+                    </div>
+                    <div class="single-box">
+                        <a href="/reporte">
+                            <div class="img-area">
+                            </div>
+                        </a>
+                        <div class="img-text">
+                            <span class="header-text"><strong>Reporte</strong></span>
                         </div>
                     </div>
                 </div>
@@ -118,7 +136,13 @@ const HomeStyle = styled.nav`
         background-image: url(http://static1.squarespace.com/static/55c7a3e2e4b0fa365689d8aa/55e0aceae4b0643202e59629/55e322ade4b077beb0266329/1590769127854/?format=1500w)
 }
 .single-box:nth-child(3) .img-area{
-    background-image: url(https://img.freepik.com/vector-gratis/ingresos-netos-calculando-ilustracion-concepto-abstracto-calculo-sueldos-formula-ingresos-netos-salario-neto-contabilidad-corporativa-calculo-ganancias-estimacion-ganancias_335657-1238.jpg?w=2000)
+    background-image: url(https://static.vecteezy.com/system/resources/previews/010/703/158/non_2x/office-worker-group-silhouette-icon-teamwork-office-business-people-sign-symbol-vector.jpg)
+}
+.single-box:nth-child(4) .img-area{
+    background-image: url(https://previews.123rf.com/images/magurok/magurok1606/magurok160600092/60046224-lado-la-celebraci%C3%B3n-de-solicitud-de-trabajo-aprobado-aprobado-cv-con-el-sello-la-l%C3%ADnea-delgada-plana.jpg)
+}
+.single-box:nth-child(5) .img-area{
+    background-image: url(https://media.istockphoto.com/vectors/agreement-contract-and-offer-color-line-icon-proposal-linear-vector-vector-id1271477227?k=20&m=1271477227&s=612x612&w=0&h=XOSF2ISnfGJZ7bb-fU7rRdDJzTKehDmOF9kcJ5gIEmA=)
 }
 .login-box{
     cursor: pointer;

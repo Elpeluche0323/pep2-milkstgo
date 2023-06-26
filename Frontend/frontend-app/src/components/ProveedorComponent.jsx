@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import NavbarComponent3 from "./NavbarComponent3";
 import styled from "styled-components";
+import ProveedorService from "../services/ProveedorService";
+
 
 class ProveedorComponent extends Component{
     constructor(props){
         super(props);
         this.state = {
-            employees: [],
+            proveedores: [],
         };
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/proveedor")
-        .then((response) => response.json())
-        .then((data) => this.setState({ proveedores: data }));
+        ProveedorService.getProveedores().then((res) => {
+            this.setState({ proveedores: res.data});
+        });
     }
+    
 
     render(){
         return(
@@ -27,16 +30,17 @@ class ProveedorComponent extends Component{
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                <th>Categoria</th>
                                 <th>Nombre</th>
+                                <th>Categoria</th>
                                 <th>Retencion</th>
                             </tr>
                         </thead>
                         <tbody>
                             {this.state.proveedores.map((proveedor) => (
-                                <tr key={proveedor.codigo}>
-                                    <td>{proveedor.categoria}</td>
+                                <tr key={proveedor.id}>
+                                    <td>{proveedor.codigo}</td>
                                     <td>{proveedor.nombre}</td>
+                                    <td>{proveedor.categoria}</td>
                                     <td>{proveedor.retencion}</td>
                                 </tr>
                             ))}
@@ -52,7 +56,6 @@ class ProveedorComponent extends Component{
 export default ProveedorComponent;
 
 const Styles = styled.div`
-
 
 .text-center {
     text-align: center;
@@ -77,28 +80,31 @@ const Styles = styled.div`
 }
 *{
     font-family: sans-serif;
-    box-sizing: border-box;
+    box-sizing: content-box;
     margin: 0;
     padding: 0;
 }
 .content-table{
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 0.9em;
-    min-width: 400px;
+    font-size: 0.8em;
+    min-width: 200px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin-left: 4%;
+    margin-right: 4%;
 }
 .content-table thead tr{
-    background-color: #009879;
+    background-color: #006992;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
     font-weight: bold;
 }
 .content-table th,
 .content-table td{
     padding: 12px 15px;
+    text-align: center;
 }
 .content-table tbody tr{
     border-bottom: 1px solid #dddddd;
@@ -113,4 +119,5 @@ const Styles = styled.div`
     font-weight: bold;
     color: #009879;
 }
+
 `

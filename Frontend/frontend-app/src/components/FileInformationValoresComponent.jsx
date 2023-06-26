@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import NavbarComponent4 from "./NavbarComponent4";
 import styled from "styled-components";
+import FileUpdateValoresService from '../services/FileUpdateValoresService';
 
 class FileInformationValoresComponent extends Component{
     constructor(props){
@@ -11,9 +12,9 @@ class FileInformationValoresComponent extends Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/valores_gs")
-        .then((response) => response.json())
-        .then((data) => this.setState({ data: data }));
+        FileUpdateValoresService.getValores().then((res) => {
+            this.setState({ data: res.data});
+        });
     }
 
     render(){
@@ -34,7 +35,8 @@ class FileInformationValoresComponent extends Component{
                             </thead>
                             <tbody>
                                 {this.state.data.map((data) => (
-                                    <tr key={data.proveedor}>
+                                    <tr key={data.id}>
+                                        <td>{data.proveedor}</td>
                                         <td>{data.grasa}</td>
                                         <td>{data.solido}</td>
                                     </tr>
@@ -52,6 +54,7 @@ class FileInformationValoresComponent extends Component{
 export default FileInformationValoresComponent;
 
 const Styles = styled.div`
+
 
 .text-center {
     text-align: center;
@@ -86,7 +89,7 @@ const Styles = styled.div`
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .content-table thead tr{
-    background-color: #009879;
+    background-color: #006992;
     color: #ffffff;
     text-align: left;
     font-weight: bold;

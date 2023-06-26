@@ -93,10 +93,14 @@ const Styles = styled.div`
   border-radius: 40px;
   margin-left: 300px;
   margin-right: 300px;
+
+  
+  
 }
 @media(max-width: 1200px){
   .f{margin-left: 200px;
-    margin-right: 200px;}
+    margin-right: 200px;}}
+    
   
 }
 .form1{

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import NavbarComponent2 from "./NavbarComponent2";
 import styled from "styled-components";
+import FileUpdateAcopioService from "../services/FileUpdateAcopioService";
 
 class FileInformationAcopioComponent extends Component{
     constructor(props){
@@ -11,9 +12,9 @@ class FileInformationAcopioComponent extends Component{
     }
 
     componentDidMount(){
-        fetch("http://localhost:8080/acopio_leche")
-        .then((response) => response.json())
-        .then((data) => this.setState({ data: data }));
+        FileUpdateAcopioService.getAcopio().then((res) => {
+            this.setState({ data: res.data});
+        });
     }
 
     render(){
@@ -35,7 +36,8 @@ class FileInformationAcopioComponent extends Component{
                             </thead>
                             <tbody>
                                 {this.state.data.map((data) => (
-                                    <tr key={data.fecha}>
+                                    <tr key={data.id}>
+                                        <td>{data.fecha}</td>
                                         <td>{data.turno}</td>
                                         <td>{data.proveedor}</td>
                                         <td>{data.kls_leche}</td>
@@ -55,6 +57,7 @@ export default FileInformationAcopioComponent;
 
 const Styles = styled.div`
 
+
 .text-center {
     text-align: center;
     justify-content: center;
@@ -66,6 +69,7 @@ const Styles = styled.div`
     justify-content: center;
     padding-top: 8px;
 }
+
 
 .f{
     justify-content: center;
@@ -88,7 +92,7 @@ const Styles = styled.div`
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .content-table thead tr{
-    background-color: #009879;
+    background-color: #006992;
     color: #ffffff;
     text-align: left;
     font-weight: bold;
