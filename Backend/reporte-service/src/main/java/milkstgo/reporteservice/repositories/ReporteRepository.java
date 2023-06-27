@@ -11,10 +11,11 @@ import java.util.List;
 @Repository
 public interface ReporteRepository extends JpaRepository<ReporteEntity,Integer> {
 
-    @Query(value = "select * from planilla as e where e.codigo_proveedor = :codigo_proveedor and e.quincena =:quincena limit 1",
-            nativeQuery = true)
-    ReporteEntity buscarReporte(@Param("codigo_proveedor") String codigo_proveedor, @Param("quincena") String quincena);
+    public ReporteEntity findByCodigo(String codigo_proveedor);
 
-    @Query(value = "select * from planilla as e where e.codigo_proveedor = :codigo_proveedor", nativeQuery = true)
-    List<ReporteEntity> buscarReportePorCodigo(@Param("codigo_proveedor")String codigo_proveedor);
+    @Query(value = "insert into planilla(codigo_proveedor) values(?)",
+            nativeQuery = true)
+    void insertarDatos(@Param("codigo_proveedor") String codigo_proveedor);
+
+
 }

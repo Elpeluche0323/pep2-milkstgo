@@ -38,12 +38,13 @@ public class AcopioController {
         return ResponseEntity.ok(proveedor);
     }
 
-    @GetMapping("/{proveedor}/{fecha}")
+    @GetMapping("/acopio/{proveedor}/{fecha}")
     public ResponseEntity<AcopioEntity> obtenerFechaPorProveedor(
             @PathVariable("proveedor") String proveedor, @PathVariable("fecha") String fecha){
         AcopioEntity fecha_envio = acopioService.obtenerAcopio(proveedor, fecha);
         return ResponseEntity.ok(fecha_envio);
     }
+
 
     @GetMapping("/primeraasistencia/{proveedor}")
     public ResponseEntity<String> obtenerPrimeraAsistencia(@PathVariable("proveedor") String proveedor){
