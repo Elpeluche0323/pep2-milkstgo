@@ -32,6 +32,18 @@ public class ReporteService {
         return proveedor;
     }
 
+    public AcopioModel obtenerAcopioPorCodigo(String proveedor){
+        AcopioModel acopio = restTemplate.getForObject("http://acopio_leche-service/proveedor/" + proveedor, AcopioModel.class);
+        System.out.println(acopio);
+        return acopio;
+    }
+
+    public ValoresModel obtenerValoresPorCodigo(String proveedor){
+        ValoresModel valores = restTemplate.getForObject("http://valores_gs-service/proveedor/" + proveedor, ValoresModel.class);
+        System.out.println(valores);
+        return valores;
+    }
+
     public AcopioModel obtenerFechaPorProveedor(String proveedor, String fecha){
         AcopioModel acopio = restTemplate.getForObject("http://acopio_leche-service/acopio/" + proveedor +"/"+ fecha, AcopioModel.class);
         System.out.println(acopio);
@@ -66,11 +78,13 @@ public class ReporteService {
 
     public void calculoPlanilla(String codigo) throws ParseException {
         ProveedorModel proveedorActual = obtenerPorCodigo(codigo);
+        AcopioModel acopioActual = obtenerAcopioPorCodigo(codigo);
+        ValoresModel valoresActual = obtenerValoresPorCodigo(codigo);
         ReporteEntity reporte_proveedor = new ReporteEntity();
-        //reporte_proveedor.setQuincena();
+        reporte_proveedor.setQuincena(calcularQuincena(acopioActual.getFecha()));
         reporte_proveedor.setCodigo_proveedor(proveedorActual.getCodigo());
         reporte_proveedor.setNombre_proveedor(proveedorActual.getNombre());
-        //reporte_proveedor.setTotal_kls_leche();
+        reporte_proveedor.setTotal_kls_leche(acopioActual.getKls_leche());
         //reporte_proveedor.setNro_dias_envio_leche();
         //reporte_proveedor.setPromedio_kls_leche();
         //reporte_proveedor.setVariacion_leche();
@@ -91,6 +105,26 @@ public class ReporteService {
         reporteRepository.save(reporte_proveedor);
     }
 
+    public String calcularQuincena(String fecha){
+        String quincena = null, año,mes;
+        int dia;
+        String quincena1 = "1" , quincena2 = "2";
+        String[] partes = fecha.split(";");
+        año = partes[0];
+        mes = partes[1];
+        dia = Integer.parseInt(partes[3]);
+        if (1 <= dia && dia <= 15) {
+            quincena = año + "/" + mes + "/" + quincena1;
+        }
+        if (16 <= dia && dia <= 31) {
+            quincena = año + "/" + mes + "/" + quincena2;
+        }
+
+        return quincena;
+    }
+
+//    public int calcularNroDias(List<String> fecha,){
+//  }
     public float extraCategoria(String categoria, Float kls_leche) {
         switch (categoria) {
             case "A":
