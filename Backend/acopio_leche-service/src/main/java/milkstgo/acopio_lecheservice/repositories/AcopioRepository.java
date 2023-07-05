@@ -20,7 +20,7 @@ public interface AcopioRepository  extends JpaRepository <AcopioEntity, Integer>
     List<String> findDistinctProveedor();
 
     @Query(value = "select e.fecha from datos_acopio as e where e.proveedor = :proveedor limit 1", nativeQuery = true)
-    String buscarFechaProveedor(@Param("proveedor")String proveedor);
+    String buscarPorProveedor(@Param("proveedor")String proveedor);
 
     @Query(value = "select *  from datos_acopio as e where e.proveedor = :proveedor", nativeQuery = true)
     ArrayList<AcopioEntity> eliminarData(@Param("proveedor")String proveedor);

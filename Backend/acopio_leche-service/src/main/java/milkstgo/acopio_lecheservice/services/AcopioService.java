@@ -94,8 +94,8 @@ public class AcopioService {
         guardarData(newData);
     }
 
-    public  String obtenerFechaProveedor(String proveedor){
-        return acopioRepository.buscarFechaProveedor(proveedor);
+    public  String obtenerProveedorCodigo(String proveedor){
+        return acopioRepository.buscarPorProveedor(proveedor);
     }
 
     public List<String> obtenerProveedor(){

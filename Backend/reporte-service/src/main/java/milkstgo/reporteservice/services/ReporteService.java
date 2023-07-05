@@ -8,7 +8,6 @@ import milkstgo.reporteservice.models.AcopioModel;
 import milkstgo.reporteservice.models.ValoresModel;
 import milkstgo.reporteservice.repositories.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,7 +50,7 @@ public class ReporteService {
     }
 
     public List<String> obtenerCodigoDeAcopio(){
-        List<String> codigosAcopio = restTemplate.getForObject("http://acopio_leche-service/proveedor", List.class);
+        List<String> codigosAcopio = restTemplate.getForObject("http://acopio_leche-service/acopio/proveedor", List.class);
         System.out.println(codigosAcopio);
         return codigosAcopio;
     }
@@ -80,29 +79,53 @@ public class ReporteService {
         ProveedorModel proveedorActual = obtenerPorCodigo(codigo);
         AcopioModel acopioActual = obtenerAcopioPorCodigo(codigo);
         ValoresModel valoresActual = obtenerValoresPorCodigo(codigo);
+        List<AcopioModel> fechasAcopio = (List<AcopioModel>) obtenerAcopioPorCodigo(codigo);
+        List<ValoresModel> grasaSolido = (List<ValoresModel>) obtenerValoresPorCodigo(codigo);
         ReporteEntity reporte_proveedor = new ReporteEntity();
+
         reporte_proveedor.setQuincena(calcularQuincena(acopioActual.getFecha()));
         reporte_proveedor.setCodigo_proveedor(proveedorActual.getCodigo());
         reporte_proveedor.setNombre_proveedor(proveedorActual.getNombre());
         reporte_proveedor.setTotal_kls_leche(acopioActual.getKls_leche());
-        //reporte_proveedor.setNro_dias_envio_leche();
-        //reporte_proveedor.setPromedio_kls_leche();
-        //reporte_proveedor.setVariacion_leche();
-        //reporte_proveedor.setGrasa();
-        //reporte_proveedor.setDescuento_variacion_grasa();
-        //reporte_proveedor.setSolidos_totales();
-        //reporte_proveedor.setVariacion_solidos_totales();
-        //reporte_proveedor.setPago_leche();
-        //reporte_proveedor.setPago_grasa();
-        //reporte_proveedor.setPago_solidos_totales();
-        //reporte_proveedor.setBonificacion_frecuencia();
-        //reporte_proveedor.setDescuento_variacion_leche();
-        //reporte_proveedor.setDescuento_variacion_grasa();
-        //reporte_proveedor.setDescuento_variacion_solidos();
-        //reporte_proveedor.setPago_total();
-        //reporte_proveedor.setMonto_retencion();
-        //reporte_proveedor.setMonto_final();
+        reporte_proveedor.setNro_dias_envio_leche(calcularNroDias(fechasAcopio));
+        reporte_proveedor.setPromedio_kls_leche(acopioActual.getKls_leche());
+        reporte_proveedor.setVariacion_leche(variacionKlsDeLeche(fechasAcopio));
+        reporte_proveedor.setGrasa(valoresActual.getGrasa());
+        reporte_proveedor.setVariacion_grasa(variacionGrasa(grasaSolido));
+        reporte_proveedor.setSolidos_totales(valoresActual.getSolido());
+        reporte_proveedor.setVariacion_solidos_totales(variacionSolido(grasaSolido));
+        reporte_proveedor.setPago_leche(extraCategoria(proveedorActual.getCategoria(), acopioActual.getKls_leche()));
+        reporte_proveedor.setPago_grasa(extraGrasa(valoresActual.getGrasa(),acopioActual.getKls_leche()));
+        reporte_proveedor.setPago_solidos_totales(extraSolidos(valoresActual.getSolido(), acopioActual.getKls_leche()));
+        reporte_proveedor.setBonificacion_frecuencia(bonificacionFrecuencia(fechasAcopio,(pagoXKlsLeche(reporte_proveedor.getPago_leche(),reporte_proveedor.getPago_grasa(),reporte_proveedor.getPago_solidos_totales()))));
+        reporte_proveedor.setDescuento_variacion_leche(descuentoVarLeche(reporte_proveedor.getPago_leche(),reporte_proveedor.getVariacion_leche()));
+        reporte_proveedor.setDescuento_variacion_grasa(descuentoVarGrasa(reporte_proveedor.getPago_grasa(),reporte_proveedor.getVariacion_grasa()));
+        reporte_proveedor.setDescuento_variacion_solidos(descuentoVarSolidos(reporte_proveedor.getPago_solidos_totales(),reporte_proveedor.getDescuento_variacion_solidos()));
+        reporte_proveedor.setPago_total(pagoTotal(
+                pagoXAcopio(
+                        (pagoXKlsLeche(reporte_proveedor.getPago_leche(),reporte_proveedor.getPago_grasa(),reporte_proveedor.getPago_solidos_totales()))
+                        ,reporte_proveedor.getBonificacion_frecuencia()
+                )
+                ,descuentosXAcopio(
+                        reporte_proveedor.getDescuento_variacion_leche(),
+                        reporte_proveedor.getDescuento_variacion_grasa(),
+                        reporte_proveedor.getDescuento_variacion_solidos())
+        ));
+        reporte_proveedor.setMonto_retencion(montoRetencion(reporte_proveedor.getPago_total()));
+        reporte_proveedor.setMonto_final(montoFinal(reporte_proveedor.getPago_total(),reporte_proveedor.getMonto_retencion()));
         reporteRepository.save(reporte_proveedor);
+    }
+
+    Float montoRetencion(Float pago_total){
+        float retencion = 0.0F;
+        if(pago_total > 950000){
+            retencion = pago_total*0.13F;
+        }
+        return retencion;
+    }
+
+    Float montoFinal(Float pago_total, Float retencion){
+        return pago_total - retencion;
     }
 
     public String calcularQuincena(String fecha){
@@ -119,12 +142,77 @@ public class ReporteService {
         if (16 <= dia && dia <= 31) {
             quincena = año + "/" + mes + "/" + quincena2;
         }
-
         return quincena;
     }
 
-//    public int calcularNroDias(List<String> fecha,){
-//  }
+    public  Float descuentoVarLeche(Float pagoLeche, Float variacionLeche){
+        if (0 <= variacionLeche && variacionLeche <= 8)
+            return (pagoLeche*0);
+        if (9 <= variacionLeche && variacionLeche <= 25)
+            return (pagoLeche*0.07F);
+        if (26 <= variacionLeche && variacionLeche <= 45)
+            return (pagoLeche*0.15F);
+        if (46 <= variacionLeche)
+            return (pagoLeche*0.30F);
+        return 0.0F;
+    }
+    public  Float descuentoVarGrasa(Float pagoGrasa, Float variacionGrasa){
+        if (0 <= variacionGrasa && variacionGrasa <= 15)
+            return (pagoGrasa*0);
+        if (16 <= variacionGrasa && variacionGrasa <= 25)
+            return (pagoGrasa*0.12F);
+        if (26 <= variacionGrasa && variacionGrasa <= 40)
+            return (pagoGrasa*0.20F);
+        if (41 <= variacionGrasa)
+            return (pagoGrasa*0.30F);
+        return 0.0F;
+    }
+    public  Float descuentoVarSolidos(Float pagoSolidos, Float variacionSolido){
+        if (0 <= variacionSolido && variacionSolido <= 6)
+            return (pagoSolidos*0);
+        if (7 <= variacionSolido && variacionSolido <= 12)
+            return (pagoSolidos*0.18F);
+        if (13 <= variacionSolido && variacionSolido <= 35)
+            return (pagoSolidos*0.27F);
+        if (36 <= variacionSolido)
+            return (pagoSolidos*0.45F);
+        return 0.0F;
+    }
+
+    public Float variacionKlsDeLeche(List<AcopioModel> kls_leche){
+        int elementos = kls_leche.size();
+        Float variacion = 0.0F;
+        if (elementos > 1) {
+            variacion = Math.abs(((kls_leche.get(1).getKls_leche()*100)/kls_leche.get(0).getKls_leche()) - 100);
+            return variacion;
+        }
+        return variacion;
+    }
+
+    public Float variacionGrasa(List<ValoresModel> grasa){
+        int elementos = grasa.size();
+        Float variacion = 0.0F;
+        if (elementos > 1){
+            variacion = Math.abs(((grasa.get(1).getGrasa()*100)/grasa.get(0).getGrasa())-100);
+            return variacion;
+        }
+        return variacion;
+    }
+    public Float variacionSolido(List<ValoresModel> solido){
+        int elementos = solido.size();
+        Float variacion = 0.0F;
+        if (elementos > 1){
+            variacion = Math.abs((((solido.get(1).getSolido()*100)/solido.get(0).getSolido())-100));
+            return variacion;
+        }
+        return variacion;
+    }
+
+    public int calcularNroDias(List<AcopioModel> fecha){
+       int cantDias = fecha.size();
+       return cantDias;
+    }
+
     public float extraCategoria(String categoria, Float kls_leche) {
         switch (categoria) {
             case "A":
@@ -171,42 +259,44 @@ public class ReporteService {
 
 
     // bonificacion frecuencia
-    public float bonificacionFrecuencia(List<String> turno,Float pagoTotalXKlsLeche){
-        int contM = 0, contT = 0;
-        for(String dia : turno){
-            if (dia == "M")
+    public float bonificacionFrecuencia(List<AcopioModel> turno, Float pagoTotalXKlsLeche){
+        int contM = 0, contT = 0, i = 0;
+        int cantTurnos = turno.size();
+        while (i < cantTurnos){
+            if (turno.get(i).getTurno() == "M")
                 contM++;
-            if (dia == "T")
+            if (turno.get(i).getTurno() == "T")
                 contT++;
+            i++;
         }
-        if(contM != 0 && contT == 0)
-            return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche*0.12);
-        if(contM == 0 && contT != 0)
-            return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche*0.08);
-        return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche*0.20);
+        if((contM + contT) >= 10) {
+            if (contM != 0 && contT == 0)
+                return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche * 0.12);
+            if (contM == 0 && contT != 0)
+                return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche * 0.08);
+            return (float) (pagoTotalXKlsLeche + pagoTotalXKlsLeche * 0.20);
+        }
+        return 0;
     }
 
     public float pagoXAcopio(Float pago_kls_leche, Float bonificacion){
         float pago_acopio_leche = pago_kls_leche + bonificacion;
         return pago_acopio_leche;
     }
+    public float descuentosXAcopio(Float descuentoLeche, Float descuentoGrasa, Float descuentoSolido){
+        float descuentos_acopio_leche = descuentoLeche + descuentoGrasa + descuentoSolido;
+        return descuentos_acopio_leche;
+    }
+
+    public float pagoTotal(Float pago_acopio_leche, Float descuento_acopio_leche){
+        Float pago_total = pago_acopio_leche - descuento_acopio_leche;
+        return pago_total;
+    }
 
     public  ArrayList<ReporteEntity> obtenerReporte(){
         return (ArrayList<ReporteEntity>)reporteRepository.findAll();
     }
-/**
-    public ReporteEntity buscarReporte(String codigo_proveedor, String quincena){
-        return this.reporteRepository.buscarReporte(codigo_proveedor, quincena);
-    }
 
-    public void eliminarReporte(ReporteEntity reporte){
-        this.reporteRepository.delete(reporte);
-    }
-
-    public List<ReporteEntity> obtenerReporteProveedor(String codigo_proveedor){
-        return reporteRepository.buscarReportePorCodigo(codigo_proveedor);
-    }
-**/
     public void eliminarReporte(){
         this.reporteRepository.deleteAll();
     }

@@ -46,9 +46,9 @@ public class AcopioController {
     }
 
 
-    @GetMapping("/primeraasistencia/{proveedor}")
-    public ResponseEntity<String> obtenerPrimeraAsistencia(@PathVariable("proveedor") String proveedor){
-        String fecha = acopioService.obtenerFechaProveedor(proveedor);
+    @GetMapping("/proveedor/{proveedor}")
+    public ResponseEntity<String> obtenerProveedorPorCodigo(@PathVariable("proveedor") String proveedor){
+        String fecha = acopioService.obtenerProveedorCodigo(proveedor);
         if (fecha.isEmpty()){
             return ResponseEntity.noContent().build();
         }
